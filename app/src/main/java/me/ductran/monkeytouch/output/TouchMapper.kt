@@ -1,8 +1,8 @@
 package me.ductran.monkeytouch.output
 
-import android.util.Log
 import android.view.KeyEvent
 import android.view.MotionEvent
+import me.ductran.monkeytouch.log.Log
 import me.ductran.monkeytouch.output.config.TouchConfig
 
 /**
@@ -10,15 +10,15 @@ import me.ductran.monkeytouch.output.config.TouchConfig
  */
 class TouchMapper(private val touchConfig: TouchConfig) {
     private val touchSimulator: TouchSimulator
-    fun processEvent(event: KeyEvent?) {
-        Log.d(LOG_TAG, "Key Event received")
+    fun processEvent(event: KeyEvent) {
+        Log.l("Key Event received ${event.keyCode} ${event.action}")
 //        for (TouchMapping tapMapping : touchConfig.mappings) {
 //            tapMapping.processEvent(event);
 //        }
     }
 
-    fun processEvent(event: MotionEvent?) {
-        Log.d(LOG_TAG, "Motion Event received")
+    fun processEvent(event: MotionEvent) {
+        Log.l( "Motion Event received ${event.x} ${event.y} ${event.action} ${event.actionButton}")
 //        for (TouchMapping tapMapping : touchConfig.mappings) {
 //            tapMapping.processEvent(event);
 //        }
@@ -31,10 +31,8 @@ class TouchMapper(private val touchConfig: TouchConfig) {
     init {
         touchSimulator = TouchSimulator()
         for (i in touchConfig.mappings.indices) {
-            touchConfig.mappings[i]
-                .setPointerId(i)
-            touchConfig.mappings[i]
-                .setTouchSimulator(touchSimulator)
+            touchConfig.mappings[i].setPointerId(i)
+            touchConfig.mappings[i].setTouchSimulator(touchSimulator)
         }
     }
 }

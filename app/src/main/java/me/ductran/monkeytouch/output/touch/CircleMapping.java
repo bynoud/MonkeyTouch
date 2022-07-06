@@ -18,8 +18,8 @@ import static android.view.MotionEvent.ACTION_UP;
 public class CircleMapping extends TouchMapping {
     public static final String KEY_TYPE = "CIRCLE";
 
-    int axis_x;
-    int axis_y;
+    public int axis_x;
+    public int axis_y;
 
     int x;
     int y;

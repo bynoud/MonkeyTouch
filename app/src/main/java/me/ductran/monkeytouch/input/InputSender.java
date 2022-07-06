@@ -14,7 +14,8 @@ import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import me.ductran.monkeytouch.MainADB;
+import me.ductran.monkeytouch.Main;
+import me.ductran.monkeytouch.models.SocketMessage;
 
 /**
  * Created by shyri on 08/09/17.
@@ -31,14 +32,21 @@ public class InputSender {
         senderThread.start();
     }
 
-    void sendKeyEvent(KeyEvent keyEvent) {
+    void sendKeyEvent(KeyEvent e) {
         Log.d(TAG, "Adding Key Event to Queue");
-        blockingQueue.add(marshall(keyEvent));
+//        blockingQueue.add(marshall(keyEvent));
+        blockingQueue.add(marshall(new SocketMessage.KeyMessage(e.getAction(), e.getKeyCode())));
     }
 
-    void sendMotionEvent(MotionEvent motionEvent) {
+    void sendMotionEvent(MotionEvent e) {
         Log.d(TAG, "Adding Motion Event to Queue");
-        blockingQueue.add(marshall(motionEvent));
+//        blockingQueue.add(marshall(motionEvent));
+        blockingQueue.add(marshall(new SocketMessage.MotionMessage(
+                e.getAction(),
+                e.getActionButton(),
+                e.getX(),
+                e.getY()
+        )));
     }
 
     byte[] marshall(Parcelable parceable) {
@@ -64,7 +72,7 @@ public class InputSender {
                         Log.d(TAG, "Taking Event from queue");
                         byte[] str = blockingQueue.take();
 
-                        socket = new Socket(serverAddr, MainADB.DEFAULT_PORT);
+                        socket = new Socket(serverAddr, Main.DEFAULT_PORT);
 
                         Log.d(TAG, "Sending Event");
                         OutputStream out = socket.getOutputStream();

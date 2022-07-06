@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">MonkeyTouch</string>
+    <string name="pref_file">preferences</string>
 </resources>

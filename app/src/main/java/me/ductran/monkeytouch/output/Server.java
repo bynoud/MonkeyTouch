@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-import me.ductran.monkeytouch.MainADB;
+import me.ductran.monkeytouch.Main;
 import me.ductran.monkeytouch.log.Log;
 
 /**
@@ -31,17 +31,21 @@ public class Server {
 
         public void run() {
             Socket socket = null;
-            Log.l("Starting server");
+            Log.l("Starting server 2");
             try {
-                serverSocket = new ServerSocket(MainADB.DEFAULT_PORT);
+                serverSocket = new ServerSocket(Main.DEFAULT_PORT);
+                Log.l("socket");
 
                 while (!Thread.currentThread()
                               .isInterrupted()) {
+                    Log.l("socket accepting");
                     socket = serverSocket.accept();
+                    Log.l("socket accepted");
                     InputReceiver inputReceiver = new InputReceiver(socket, handler);
+                    Log.l("socket starting");
                     inputReceiver.start();
                 }
-                Log.l("Starting server");
+                Log.l("End server");
             } catch (IOException e) {
                 e.printStackTrace();
             }

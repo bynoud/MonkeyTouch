@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import me.ductran.monkeytouch.log.Log;
+import me.ductran.monkeytouch.models.SocketMessage;
 
 import static me.ductran.monkeytouch.EventInput.SOURCE_KEY;
 import static me.ductran.monkeytouch.EventInput.SOURCE_MOVEMENT;
@@ -51,7 +52,9 @@ public class InputReceiver {
 
         public void run() {
             try {
+                Log.l("InputReciver running");
                 int len = input.readInt();
+                Log.l("get len " + len);
                 byte[] data = new byte[len];
                 if (len > 0) {
                     input.readFully(data);
@@ -61,24 +64,28 @@ public class InputReceiver {
 
                 Message message = new Message();
 
-                int type = parcel.readInt();
-                parcel.setDataPosition(0);
-
-                if (type == SOURCE_MOVEMENT) {
-                    MotionEvent event = MotionEvent.CREATOR.createFromParcel(parcel);
-
-                    message.what = SOURCE_MOVEMENT;
-                    message.obj = event;
-                } else if (type == SOURCE_KEY) {
-                    KeyEvent event = KeyEvent.CREATOR.createFromParcel(parcel);
-
-                    message.what = SOURCE_KEY;
-                    message.obj = event;
-                } else {
-                    Log.l("Message not recognized" + message.obj);
-                }
-
+                message.obj = SocketMessage.CREATOR.createFromParcel(parcel);
                 handler.sendMessage(message);
+
+//                int type = parcel.readInt();
+//                Log.l("IR type " + type);
+//                parcel.setDataPosition(0);
+//
+//                if (type == SOURCE_MOVEMENT) {
+//                    MotionEvent event = MotionEvent.CREATOR.createFromParcel(parcel);
+//
+//                    message.what = SOURCE_MOVEMENT;
+//                    message.obj = event;
+//                } else if (type == SOURCE_KEY) {
+//                    KeyEvent event = KeyEvent.CREATOR.createFromParcel(parcel);
+//
+//                    message.what = SOURCE_KEY;
+//                    message.obj = event;
+//                } else {
+//                    Log.l("Message not recognized" + message.obj);
+//                }
+//
+//                handler.sendMessage(message);
 
             } catch (Exception e) {
                 e.printStackTrace();
